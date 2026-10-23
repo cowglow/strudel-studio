@@ -1,0 +1,66 @@
+/* native controls and OS system colors, forced dark: the logo is white */
+:root {
+  color-scheme: dark;
+  font-family: system-ui, sans-serif;
+  line-height: 1.5;
+}
+
+body {
+  margin: 0;
+  background: Canvas;
+  color: CanvasText;
+}
+
+main {
+  max-width: 40rem;
+  padding: 2rem 1rem;
+}
+
+.logo {
+  display: block;
+  width: min(100%, 27rem);
+  height: auto;
+}
+
+.logo-small {
+  width: min(100%, 14rem);
+}
+
+/* bevel: light top/left + dark bottom/right reads as raised; swapped when pressed */
+.bevel {
+  padding: 0.5rem 1rem;
+  font: inherit;
+  color: CanvasText;
+  background: #3c3c3c;
+  border: 2px solid;
+  border-color: #6a6a6a #141414 #141414 #6a6a6a;
+  border-radius: 0;
+  cursor: pointer;
+}
+
+.bevel:active {
+  border-color: #141414 #6a6a6a #6a6a6a #141414;
+  padding: calc(0.5rem + 1px) calc(1rem - 1px) calc(0.5rem - 1px) calc(1rem + 1px);
+}
+
+#tracks {
+  padding-left: 1.25rem;
+}
+
+#tracks li + li {
+  margin-top: 1.25rem;
+}
+
+#tracks h2 {
+  margin: 0;
+  font-size: 1.05rem;
+}
+
+#tracks p {
+  margin: 0 0 0.5rem;
+}
+
+#tracks audio {
+  display: block;
+  width: 100%;
+}
