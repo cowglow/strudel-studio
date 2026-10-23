@@ -16,6 +16,43 @@ main {
   padding: 2rem 1rem;
 }
 
+main.wide {
+  max-width: none;
+}
+
+/* page fills the viewport so the footer sits at the bottom even with few tracks */
+body.with-footer {
+  display: flex;
+  flex-direction: column;
+  min-height: 100dvh;
+}
+
+body.with-footer main {
+  flex: 1;
+}
+
+/* stays pinned to the bottom of the window while the list scrolls */
+footer {
+  position: sticky;
+  bottom: 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem 1.5rem;
+  padding: 1rem;
+  background: Canvas;
+  border-top: 1px solid GrayText;
+}
+
+/* back button on the right, within thumb reach */
+footer form {
+  margin: 0 0 0 auto;
+}
+
+footer .logo {
+  width: min(100%, 11rem);
+}
+
 .logo {
   display: block;
   width: min(100%, 27rem);
@@ -43,12 +80,19 @@ main {
   padding: calc(0.5rem + 1px) calc(1rem - 1px) calc(0.5rem - 1px) calc(1rem + 1px);
 }
 
+/* one row of tracks, wrapping onto new rows as the window narrows */
 #tracks {
-  padding-left: 1.25rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem 2rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
 }
 
-#tracks li + li {
-  margin-top: 1.25rem;
+#tracks li {
+  flex: 0 1 18rem;
+  min-width: 0;
 }
 
 #tracks h2 {
