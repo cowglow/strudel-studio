@@ -16,3 +16,15 @@ if (import.meta.env.DEV) {
 for (const link of document.querySelectorAll<HTMLAnchorElement>('.site-header nav a')) {
   if (new URL(link.href).pathname === location.pathname) link.setAttribute('aria-current', 'page')
 }
+
+// only one track plays at a time: starting one pauses the rest.
+// `play` doesn't bubble, so listen in the capture phase.
+document.addEventListener(
+  'play',
+  (event) => {
+    for (const audio of document.querySelectorAll('audio')) {
+      if (audio !== event.target) audio.pause()
+    }
+  },
+  true,
+)

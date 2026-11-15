@@ -53,15 +53,3 @@ if (tracks.length) {
 } else {
   list.innerHTML = '<li>Nothing here yet.</li>'
 }
-
-// only one track plays at a time: starting one pauses the rest.
-// `play` doesn't bubble, so listen in the capture phase.
-document.addEventListener(
-  'play',
-  (event) => {
-    for (const audio of document.querySelectorAll('audio')) {
-      if (audio !== event.target) audio.pause()
-    }
-  },
-  true,
-)

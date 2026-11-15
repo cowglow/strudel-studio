@@ -55,7 +55,7 @@
 .track-meta,
 .toolbar label,
 .legal h2,
-.featured h2 {
+.background h2 {
   font-size: var(--size-label);
   text-transform: uppercase;
   letter-spacing: 0.08em;
@@ -255,13 +255,49 @@ main.wide {
   margin-bottom: 1rem;
 }
 
-.featured {
-  margin-top: 2.5rem;
+/* background: earlier work, set apart from the profile by a rule */
+.background {
+  margin-top: 3rem;
+  padding-top: 2rem;
+  border-top: 1px solid var(--border);
 }
 
-.featured h2 {
-  margin: 0 0 0.5rem;
+.background h2 {
+  margin: 0 0 1rem;
   color: var(--muted);
+}
+
+.background h3 {
+  margin: 0 0 0.25rem;
+  font-size: var(--size-h2);
+}
+
+.album {
+  display: grid;
+  gap: 1.25rem;
+  margin: 1.5rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.album h4 {
+  margin: 0 0 0.5rem;
+  font-size: 1rem;
+}
+
+.album .track-meta {
+  margin-left: 0.5rem;
+  color: var(--muted);
+}
+
+.album audio {
+  display: block;
+  width: min(100%, 24rem);
+  margin-bottom: 0.25rem;
+}
+
+.album a {
+  font-size: var(--size-small);
 }
 
 /* bevel: light top/left + dark bottom/right reads as raised; swapped when pressed */
