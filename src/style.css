@@ -63,6 +63,15 @@ footer .logo {
   width: min(100%, 14rem);
 }
 
+.featured {
+  margin-top: 3rem;
+}
+
+.featured h2 {
+  margin: 0;
+  font-size: 1.05rem;
+}
+
 /* bevel: light top/left + dark bottom/right reads as raised; swapped when pressed */
 .bevel {
   padding: 0.5rem 1rem;
