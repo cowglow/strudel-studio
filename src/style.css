@@ -1,3 +1,19 @@
+/* Quantico (SIL OFL 1.1; the license ships as public/fonts/quantico-OFL.txt), self-hosted: Latin subset, regular and bold */
+@font-face {
+  font-family: 'Quantico';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('./fonts/quantico-400.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Quantico';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('./fonts/quantico-700.woff2') format('woff2');
+}
+
 /* palette: contrast against --bg in brackets (WCAG AA needs 4.5 for text) */
 :root {
   --bg: #1e1e1e; /* dark gray, not black */
@@ -13,30 +29,43 @@
   --bevel-light: #5c5c5c;
   --bevel-dark: #0e0e0e;
 
-  /* no hosted fonts: the OS's monospace via the browser (see TODO.md) */
+  --font: 'Quantico', var(--mono);
+  /* code keeps the OS's monospace: columns line up and nothing extra is downloaded */
   --mono: ui-monospace, 'SF Mono', Menlo, Consolas, 'Liberation Mono', 'DejaVu Sans Mono', monospace;
 
   color-scheme: dark; /* native controls (audio, select) render dark */
   accent-color: var(--link);
-  font-family: var(--mono);
-  font-size: 15px;
+  font-family: var(--font);
+  font-size: 16px;
   line-height: 1.6;
-  text-transform: uppercase;
-  letter-spacing: 0.04em; /* caps read better slightly spaced */
+  letter-spacing: 0.01em;
+
+  /* type scale: text reads as written; caps are kept for small interface labels */
+  --size-label: 0.8rem;
+  --size-small: 0.9rem;
+  --size-h2: 1.35rem;
+  --size-h1: 2rem;
 }
 
-/* form controls don't inherit text-transform by default */
-button,
-select,
-input {
-  text-transform: inherit;
-  letter-spacing: inherit;
+/* small caps-lock labels: buttons, nav, footer, metadata, section headings.
+   Spaced out, because capitals set tight read as shouting. */
+.bevel,
+.site-footer,
+.label,
+.track-meta,
+.toolbar label,
+.legal h2,
+.featured h2 {
+  font-size: var(--size-label);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
 }
 
 /* code stays as written: Strudel is case-sensitive */
 #editor,
 pre,
 code {
+  font-family: var(--mono);
   text-transform: none;
   letter-spacing: normal;
 }
@@ -76,12 +105,17 @@ a:hover {
 h1,
 h2 {
   font-weight: 700;
-  letter-spacing: -0.02em;
+  line-height: 1.2;
 }
 
 h1 {
   margin: 0 0 1.5rem;
-  font-size: 1.6rem;
+  font-size: var(--size-h1);
+  letter-spacing: -0.01em;
+}
+
+p {
+  margin: 0 0 1rem;
 }
 
 main {
@@ -92,6 +126,33 @@ main {
 
 main.wide {
   max-width: none;
+}
+
+/* Impressum, privacy: long text, smaller section headings */
+.legal h2 {
+  margin: 2rem 0 0.5rem;
+  color: var(--muted);
+}
+
+/* Deutsch / English toggle above the legal text */
+.lang-switch {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 2rem;
+}
+
+/* without scripts both versions show, one after the other */
+.legal .lang + .lang {
+  margin-top: 3rem;
+  padding-top: 2rem;
+  border-top: 1px solid var(--border);
+}
+
+.legal .lang[hidden] + .lang,
+.legal .lang:has(+ .lang[hidden]) {
+  margin-top: 0;
+  padding-top: 0;
+  border-top: 0;
 }
 
 /* visible to screen readers only */
@@ -150,7 +211,6 @@ main.wide {
   background: var(--surface);
   border-top: 1px solid var(--border);
   color: var(--muted);
-  font-size: 0.85rem;
 }
 
 /* credit on the left, GitHub on the right; stacks on narrow screens */
@@ -200,14 +260,16 @@ main.wide {
 }
 
 .featured h2 {
-  margin: 0;
-  font-size: 1.05rem;
+  margin: 0 0 0.5rem;
+  color: var(--muted);
 }
 
 /* bevel: light top/left + dark bottom/right reads as raised; swapped when pressed */
 .bevel {
-  padding: 0.5rem 1rem;
-  font: inherit;
+  padding: 0.6rem 1rem;
+  font-family: inherit;
+  font-weight: 700;
+  line-height: 1.6;
   color: var(--text);
   background: var(--bevel-face);
   border: 2px solid;
@@ -223,12 +285,14 @@ a.bevel {
 
 /* pressed: while clicking, and for the nav button of the current page */
 .bevel:active,
-.bevel[aria-current='page'] {
+.bevel[aria-current='page'],
+.bevel[aria-pressed='true'] {
   border-color: var(--bevel-dark) var(--bevel-light) var(--bevel-light) var(--bevel-dark);
-  padding: calc(0.5rem + 1px) calc(1rem - 1px) calc(0.5rem - 1px) calc(1rem + 1px);
+  padding: calc(0.6rem + 1px) calc(1rem - 1px) calc(0.6rem - 1px) calc(1rem + 1px);
 }
 
-.bevel[aria-current='page'] {
+.bevel[aria-current='page'],
+.bevel[aria-pressed='true'] {
   background: var(--bg); /* sunk below the raised #333 faces */
   cursor: default;
 }
@@ -258,13 +322,17 @@ form {
 }
 
 #tracks h2 {
-  margin: 0;
-  font-size: 1.05rem;
+  margin: 0 0 0.25rem;
+  font-size: var(--size-h2);
 }
 
 #tracks p {
   margin: 0 0 0.5rem;
   color: var(--muted);
+}
+
+#tracks .track-meta {
+  margin-bottom: 0.75rem;
 }
 
 #tracks audio {
@@ -273,8 +341,8 @@ form {
 }
 
 #tracks .track-links {
-  margin-top: 0.5rem;
-  font-size: 0.9rem;
+  margin-top: 0.75rem;
+  font-size: var(--size-small);
 }
 
 /* studio (local only) */
@@ -304,12 +372,18 @@ form {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
+  color: var(--muted);
 }
 
 /* same box as the buttons beside them, but sunken: a field, not a button */
 .toolbar select {
-  padding: calc(0.5rem + 2px) 0.5rem; /* selects size their content box differently */
+  /* the label's caps don't carry into the field: composition names read as written */
+  padding: 0.6rem 0.5rem;
   font: inherit;
+  font-size: 1rem;
+  line-height: 1.6;
+  text-transform: none;
+  letter-spacing: 0.01em;
   color: var(--text);
   background: var(--bg);
   border: 2px solid;
@@ -333,7 +407,7 @@ form {
 
 #result h2 {
   margin: 0 0 0.5rem;
-  font-size: 1.05rem;
+  font-size: var(--size-h2);
 }
 
 #result audio {

@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Impressum · COWGLOW's strudel studio</title>
+    <meta name="robots" content="noindex" />
+    <link rel="stylesheet" href="/src/style.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <a href="../" class="brand"><img src="/images/cg-logo.png" alt="COWGLOW, home" class="logo" /></a>
+      <nav aria-label="Main">
+        <ul>
+          <li><a href="../gallery/" class="bevel">Gallery</a></li>
+          <li><a href="../about/" class="bevel">About</a></li>
+        </ul>
+      </nav>
+    </header>
+    <main class="legal">
+      <!-- shown once src/legal.ts has picked a language; without scripts both versions stay visible -->
+      <div class="lang-switch" role="group" aria-label="Sprache / Language" hidden>
+        <button type="button" class="bevel" data-lang="de" lang="de">Deutsch</button>
+        <button type="button" class="bevel" data-lang="en" lang="en">English</button>
+      </div>
+      <section id="de" lang="de" class="lang">
+      <h1>Impressum</h1>
+      <h2>Angaben gemäß § 5 DDG</h2>
+      <p>
+        Philip Saa<br />
+        Meckenhausen C8<br />
+        91161 Hilpoltstein<br />
+        Deutschland
+      </p>
+      <h2>Kontakt</h2>
+      <p>E-Mail: <a href="mailto:cowglow+strudel@gmail.com">cowglow+strudel@gmail.com</a></p>
+      <h2>Urheberrecht</h2>
+      <p>
+        Die Kompositionen und Aufnahmen auf dieser Website sind von COWGLOW. Der Quellcode der Kompositionen wird zum
+        Download angeboten; die Website selbst ist auf
+        <a href="https://github.com/cowglow/strudel-studio" target="_blank" rel="noopener">GitHub</a> einsehbar.
+        Die Kompositionen sind mit <a href="https://strudel.cc" target="_blank" rel="noopener">Strudel</a> geschrieben
+        (AGPL-3.0-or-later). Verwendete Samples stammen von Dritten und unterliegen deren Rechten.
+      </p>
+      <p>Datenschutz: siehe <a href="../privacy/">Datenschutzerklärung</a>.</p>
+      </section>
+      <section id="en" lang="en" class="lang">
+        <h1>Legal notice</h1>
+        <p>English translation for convenience; the German version is the legally binding one.</p>
+        <h2>Information according to § 5 DDG (German Digital Services Act)</h2>
+        <p>
+          Philip Saa<br />
+          Meckenhausen C8<br />
+          91161 Hilpoltstein<br />
+          Germany
+        </p>
+        <h2>Contact</h2>
+        <p>E-mail: <a href="mailto:cowglow+strudel@gmail.com">cowglow+strudel@gmail.com</a></p>
+        <h2>Copyright</h2>
+        <p>
+          The compositions and recordings on this website are by COWGLOW. The source code of each composition is
+          offered as a download; the website itself is public on
+          <a href="https://github.com/cowglow/strudel-studio" target="_blank" rel="noopener">GitHub</a>.
+          The compositions are written with <a href="https://strudel.cc" target="_blank" rel="noopener">Strudel</a>
+          (AGPL-3.0-or-later). Samples used are by third parties and remain subject to their rights.
+        </p>
+        <p>Privacy: see the <a href="../privacy/">privacy policy</a>.</p>
+      </section>
+    </main>
+    <footer class="site-footer">
+      <p>Compositions written in <a href="https://strudel.cc" target="_blank" rel="noopener">Strudel</a>, rendered to audio.</p>
+      <p><a href="../impressum/">Impressum</a> · <a href="../privacy/">Datenschutz</a> · <a href="https://github.com/cowglow/strudel-studio" target="_blank" rel="noopener">Source on GitHub</a></p>
+    </footer>
+    <script type="module" src="/src/site.ts"></script>
+    <script type="module" src="/src/legal.ts"></script>
+  </body>
+</html>

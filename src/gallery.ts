@@ -16,6 +16,7 @@ function renderTrack(track: Track): HTMLLIElement {
   title.textContent = track.title
 
   const meta = document.createElement('p')
+  meta.className = 'track-meta'
   meta.textContent = `${track.bpm} bpm · ${track.bars} bars · ${formatTime(track.seconds)}`
 
   const credit = document.createElement('p')

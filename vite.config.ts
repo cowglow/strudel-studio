@@ -14,6 +14,8 @@ export default defineConfig({
         home: resolve(import.meta.dirname, 'index.html'),
         gallery: resolve(import.meta.dirname, 'gallery/index.html'),
         about: resolve(import.meta.dirname, 'about/index.html'),
+        impressum: resolve(import.meta.dirname, 'impressum/index.html'),
+        privacy: resolve(import.meta.dirname, 'privacy/index.html'),
       },
     },
   },
