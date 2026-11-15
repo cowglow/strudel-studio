@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Studio · COWGLOW's strudel studio</title>
+    <link rel="stylesheet" href="/src/style.css" />
+  </head>
+  <!-- local only: served by `npm run dev`, never part of `vite build` -->
+  <body>
+    <header class="site-header">
+      <a href="/" class="brand"><img src="/images/cg-logo.png" alt="COWGLOW, home" class="logo" /></a>
+      <nav aria-label="Main">
+        <ul>
+          <li><a href="/gallery/">Gallery</a></li>
+          <li><a href="/about/">About</a></li>
+        </ul>
+      </nav>
+    </header>
+    <main class="wide studio">
+      <h1>Studio</h1>
+      <div class="toolbar">
+        <label>Composition <select id="pick"></select></label>
+        <label>Status
+          <select id="state">
+            <option value="backlog">Backlog</option>
+            <option value="complete">Complete</option>
+          </select>
+        </label>
+        <button type="button" id="new" class="bevel">New…</button>
+        <button type="button" id="rename" class="bevel">Rename…</button>
+      </div>
+      <div class="toolbar">
+        <button type="button" id="play" class="bevel" title="Ctrl+Enter">Play</button>
+        <button type="button" id="stop" class="bevel" title="Ctrl+.">Stop</button>
+        <button type="button" id="save" class="bevel" title="Ctrl+S / ⌘S">Save</button>
+        <button type="button" id="render" class="bevel">Render</button>
+        <output id="status" aria-live="polite"></output>
+      </div>
+      <div id="editor"></div>
+      <section id="result" hidden>
+        <h2>Rendered</h2>
+        <audio controls preload="none"></audio>
+        <details>
+          <summary>Render log</summary>
+          <pre id="log"></pre>
+        </details>
+      </section>
+    </main>
+    <footer class="site-footer">
+      <p>Compositions written in <a href="https://strudel.cc" target="_blank" rel="noopener">Strudel</a>, rendered to audio.</p>
+      <p>Source on GitHub <span class="placeholder">[coming soon]</span></p>
+    </footer>
+    <script type="module" src="/src/site.ts"></script>
+    <script type="module" src="./main.ts"></script>
+  </body>
+</html>

@@ -14,5 +14,5 @@
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true
   },
-  "include": ["src", "render", "scripts", "vite.config.ts"]
+  "include": ["src", "render", "scripts", "studio", "vite.config.ts"]
 }

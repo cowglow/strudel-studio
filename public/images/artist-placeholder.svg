@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="320" height="320" viewBox="0 0 320 320">
+  <rect width="320" height="320" fill="#262626"/>
+  <rect x="0.5" y="0.5" width="319" height="319" fill="none" stroke="#3a3a3a"/>
+  <circle cx="160" cy="128" r="52" fill="none" stroke="#5c5c5c" stroke-width="2"/>
+  <path d="M68 272c10-52 48-80 92-80s82 28 92 80" fill="none" stroke="#5c5c5c" stroke-width="2"/>
+  <text x="160" y="304" fill="#a8a8a8" font-family="ui-monospace, Menlo, Consolas, monospace" font-size="14" text-anchor="middle">[ARTIST PHOTO]</text>
+</svg>

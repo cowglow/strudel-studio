@@ -1,5 +1,5 @@
-// Renders compositions/*.js to renders/<slug>.wav and public/audio/<slug>.mp3,
-// then rewrites src/tracks.json for the gallery.
+// Renders compositions/*.js (see scripts/tracks.ts for where the outputs go),
+// then syncs the published tracks and src/tracks.json for the gallery.
 //
 //   npm run render                 render new or changed compositions
 //   npm run render -- jungle-01    render only these slugs
@@ -8,60 +8,27 @@
 // Each composition needs a header comment, e.g.:
 //   // @title Jungle 01
 //   // @bars 24
+//   // @status complete     (or backlog: rendered locally, kept out of the gallery)
 
-import { existsSync } from 'node:fs'
-import { mkdir, readdir, readFile, stat, writeFile } from 'node:fs/promises'
+import { mkdir, readFile, writeFile } from 'node:fs/promises'
 import { basename, join } from 'node:path'
 import { Mp3Encoder } from '@breezystack/lamejs'
 import { chromium } from 'playwright'
 import { createServer } from 'vite'
-import type { Track } from '../src/track.ts'
+import { type Composition, readCompositions } from './compositions.ts'
+import { dirs, needsRender, type RenderFacts, syncTracks } from './tracks.ts'
 
 const ROOT = join(import.meta.dirname, '..')
-const COMPOSITIONS = join(ROOT, 'compositions')
-const WAV_DIR = join(ROOT, 'renders')
-const MP3_DIR = join(ROOT, 'public', 'audio')
-const TRACKS_JSON = join(ROOT, 'src', 'tracks.json')
+const { compositions: COMPOSITIONS, backlog: RENDERS } = dirs(ROOT)
 const MP3_KBPS = 192
 const RENDER_TIMEOUT_MS = 10 * 60 * 1000
 
-interface Composition {
-  slug: string
-  file: string
-  code: string
-  title: string
-  bars: number
-}
-
-function parseHeader(code: string): Record<string, string> {
-  const header: Record<string, string> = {}
-  for (const line of code.split('\n')) {
-    const match = line.match(/^\s*\/\/\s*@(\w+)\s+(.+?)\s*$/)
-    if (match) header[match[1]] = match[2]
-    else if (line.trim() && !line.trim().startsWith('//')) break // header ends at first code line
-  }
-  return header
-}
-
 async function loadCompositions(): Promise<Composition[]> {
-  const files = (await readdir(COMPOSITIONS)).filter((f) => f.endsWith('.js')).sort()
-  return Promise.all(
-    files.map(async (f) => {
-      const file = join(COMPOSITIONS, f)
-      const code = await readFile(file, 'utf8')
-      const slug = basename(f, '.js')
-      const header = parseHeader(code)
-      const bars = Number(header.bars)
-      if (!Number.isInteger(bars) || bars <= 0) throw new Error(`${f}: missing or invalid "// @bars <n>" header`)
-      return { slug, file, code, title: header.title ?? slug, bars }
-    }),
-  )
-}
-
-async function isStale(c: Composition): Promise<boolean> {
-  const mp3 = join(MP3_DIR, `${c.slug}.mp3`)
-  if (!existsSync(mp3)) return true
-  return (await stat(c.file)).mtimeMs > (await stat(mp3)).mtimeMs
+  const compositions = await readCompositions(COMPOSITIONS)
+  for (const c of compositions) {
+    if (Number.isNaN(c.bars)) throw new Error(`${basename(c.file)}: missing or invalid "// @bars <n>" header`)
+  }
+  return compositions
 }
 
 // renderPatternAudio writes 16-bit PCM; find the fmt and data chunks
@@ -106,11 +73,6 @@ function encodeMp3(wav: Buffer): Buffer {
   return Buffer.concat(chunks)
 }
 
-async function readTracks(): Promise<Track[]> {
-  if (!existsSync(TRACKS_JSON)) return []
-  return JSON.parse(await readFile(TRACKS_JSON, 'utf8'))
-}
-
 async function main() {
   const args = process.argv.slice(2)
   const force = args.includes('--force')
@@ -123,15 +85,11 @@ async function main() {
   const todo: Composition[] = []
   for (const c of compositions) {
     if (only.length && !only.includes(c.slug)) continue
-    if (force || only.length || (await isStale(c))) todo.push(c)
+    if (force || only.length || (await needsRender(ROOT, c.slug, c.code))) todo.push(c)
   }
 
-  const previous = new Map((await readTracks()).map((t) => [t.slug, t]))
-  const rendered = new Map<string, Track>()
-
   if (todo.length) {
-    await mkdir(WAV_DIR, { recursive: true })
-    await mkdir(MP3_DIR, { recursive: true })
+    await mkdir(RENDERS, { recursive: true })
 
     const server = await createServer({
       root: ROOT,
@@ -162,20 +120,19 @@ async function main() {
           page.waitForEvent('download', { timeout: RENDER_TIMEOUT_MS }),
           page.evaluate(([code, bars, name]) => window.renderComposition(code, bars, name), [c.code, c.bars, c.slug] as const),
         ])
-        const wavPath = join(WAV_DIR, `${c.slug}.wav`)
-        await download.saveAs(wavPath)
+        const out = (ext: string) => join(RENDERS, `${c.slug}.${ext}`)
+        await download.saveAs(out('wav'))
         await page.close()
 
-        await writeFile(join(MP3_DIR, `${c.slug}.mp3`), encodeMp3(await readFile(wavPath)))
-
-        rendered.set(c.slug, {
-          slug: c.slug,
-          title: c.title,
+        // everything lands in renders/ first; syncTracks publishes complete ones
+        const facts: RenderFacts = {
           bars: c.bars,
           bpm: Math.round(cps * 60 * 4),
           seconds: Math.round((c.bars / cps) * 10) / 10,
-          mp3: `audio/${c.slug}.mp3`,
-        })
+        }
+        await writeFile(out('mp3'), encodeMp3(await readFile(out('wav'))))
+        await writeFile(out('txt'), c.code)
+        await writeFile(out('json'), JSON.stringify(facts, null, 2) + '\n')
         console.log(`done in ${((Date.now() - started) / 1000).toFixed(1)}s`)
       }
     } finally {
@@ -186,14 +143,8 @@ async function main() {
     console.log('nothing to render (use --force to re-render)')
   }
 
-  // keep entries for compositions that still exist and have audio
-  const tracks: Track[] = []
-  for (const c of compositions) {
-    const track = rendered.get(c.slug) ?? previous.get(c.slug)
-    if (track && existsSync(join(MP3_DIR, `${c.slug}.mp3`))) tracks.push({ ...track, title: c.title })
-  }
-  await writeFile(TRACKS_JSON, JSON.stringify(tracks, null, 2) + '\n')
-  console.log(`wrote ${tracks.length} track(s) to src/tracks.json`)
+  const tracks = await syncTracks(ROOT)
+  console.log(`${tracks.length} track(s) in the gallery`)
 }
 
 main().catch((err) => {

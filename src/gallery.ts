@@ -21,17 +21,33 @@ function renderTrack(track: Track): HTMLLIElement {
   const audio = document.createElement('audio')
   audio.controls = true
   audio.preload = 'none'
-  // mp3 paths are relative to the site root; the gallery lives one level down
+  // paths are relative to the site root; the gallery lives one level down
   audio.src = `../${track.mp3}`
 
-  li.append(title, meta, audio)
+  // the exact code behind the recording, to keep or to play with in the REPL
+  const download = document.createElement('a')
+  download.href = `../${track.source}`
+  download.download = `${track.slug}.txt`
+  download.textContent = 'Download code'
+
+  const open = document.createElement('a')
+  open.href = track.strudel
+  open.target = '_blank'
+  open.rel = 'noopener'
+  open.textContent = 'Open in Strudel ↗'
+
+  const links = document.createElement('p')
+  links.className = 'track-links'
+  links.append(download, ' · ', open)
+
+  li.append(title, meta, audio, links)
   return li
 }
 
 if (tracks.length) {
   list.append(...(tracks as Track[]).map(renderTrack))
 } else {
-  list.innerHTML = '<li>Nothing rendered yet. Run <code>npm run render</code>.</li>'
+  list.innerHTML = '<li>Nothing here yet.</li>'
 }
 
 // only one track plays at a time: starting one pauses the rest.

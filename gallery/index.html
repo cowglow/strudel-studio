@@ -6,17 +6,26 @@
     <title>Gallery · COWGLOW's strudel studio</title>
     <link rel="stylesheet" href="/src/style.css" />
   </head>
-  <body class="with-footer">
+  <body>
+    <header class="site-header">
+      <a href="../" class="brand"><img src="/images/cg-logo.png" alt="COWGLOW, home" class="logo" /></a>
+      <nav aria-label="Main">
+        <ul>
+          <li><a href="./">Gallery</a></li>
+          <li><a href="../about/">About</a></li>
+        </ul>
+      </nav>
+    </header>
     <main class="wide">
       <h1>Gallery</h1>
       <ul id="tracks"></ul>
     </main>
-    <footer>
-      <img src="/images/cg-logo.png" alt="COWGLOW" class="logo logo-small" />
-      <form action="../">
-        <button type="submit" class="bevel">← Home</button>
-      </form>
+    <footer class="site-footer">
+      <p>Compositions written in <a href="https://strudel.cc" target="_blank" rel="noopener">Strudel</a>, rendered to audio.</p>
+      <!-- TODO: link the GitHub repo once it exists (see TODO.md) -->
+      <p>Source on GitHub <span class="placeholder">[coming soon]</span></p>
     </footer>
+    <script type="module" src="/src/site.ts"></script>
     <script type="module" src="/src/gallery.ts"></script>
   </body>
 </html>

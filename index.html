@@ -7,23 +7,26 @@
     <link rel="stylesheet" href="/src/style.css" />
   </head>
   <body>
-    <main>
-      <h1><img src="/images/cg-logo.png" alt="COWGLOW" class="logo" /></h1>
-      <p>strudel studio &amp; gallery</p>
-      <p>Compositions written in <a href="https://strudel.cc" target="_blank" rel="noopener">Strudel</a>, rendered to audio.</p>
-      <form action="gallery/">
-        <button type="submit" class="bevel">Enter the gallery</button>
-      </form>
-      <section class="featured">
-        <h2>Active Script (Demo)</h2>
-        <p>An earlier set, on <a href="https://soundcloud.com/cowglow/sets/active-script-demo" target="_blank" rel="noopener">SoundCloud</a>:</p>
+    <header class="site-header">
+      <a href="./" class="brand"><img src="/images/cg-logo.png" alt="COWGLOW, home" class="logo" /></a>
+      <nav aria-label="Main">
         <ul>
-          <li><a href="https://soundcloud.com/cowglow/00-script-active-script-demo-attack-of-the-clones" target="_blank" rel="noopener">Attack Of The Clones</a></li>
-          <li><a href="https://soundcloud.com/cowglow/00-script-active-script-demo-bear-fight" target="_blank" rel="noopener">Bear Fight</a></li>
-          <li><a href="https://soundcloud.com/cowglow/00-script-active-script-demo-rendision-no5" target="_blank" rel="noopener">Rendision No5</a></li>
-          <li><a href="https://soundcloud.com/cowglow/00-script-active-script-demo-ultra" target="_blank" rel="noopener">Ultra</a></li>
+          <li><a href="gallery/">Gallery</a></li>
+          <li><a href="about/">About</a></li>
         </ul>
-      </section>
+      </nav>
+    </header>
+    <main>
+      <h1><span class="prompt" aria-hidden="true">&gt;</span> strudel studio &amp; gallery<span class="cursor" aria-hidden="true"></span></h1>
+      <form action="gallery/">
+        <button type="submit" class="bevel">Gallery</button>
+      </form>
     </main>
+    <footer class="site-footer">
+      <p>Compositions written in <a href="https://strudel.cc" target="_blank" rel="noopener">Strudel</a>, rendered to audio.</p>
+      <!-- TODO: link the GitHub repo once it exists (see TODO.md) -->
+      <p>Source on GitHub <span class="placeholder">[coming soon]</span></p>
+    </footer>
+    <script type="module" src="/src/site.ts"></script>
   </body>
 </html>

@@ -1,18 +1,74 @@
-/* native controls and OS system colors, forced dark: the logo is white */
+/* palette: contrast against --bg in brackets (WCAG AA needs 4.5 for text) */
 :root {
-  color-scheme: dark;
-  font-family: system-ui, sans-serif;
-  line-height: 1.5;
+  --bg: #1e1e1e; /* dark gray, not black */
+  --surface: #262626; /* header, footer, editor */
+  --border: #3a3a3a; /* decorative only */
+  --text: #f2f2f2; /* [14.9] */
+  --muted: #a8a8a8; /* [7.0] secondary text */
+  --link: #ff5f5f; /* [5.6] on --bg and --surface only */
+  --link-hover: #ff8a8a; /* [7.3] */
+  --red-dark: #8b1a1a; /* [1.8] never for text: underlines, selection */
+  --warn: #ffb347; /* [9.4] status messages */
+  --bevel-face: #333333; /* buttons keep --text: --link only reaches 4.2 here */
+  --bevel-light: #5c5c5c;
+  --bevel-dark: #0e0e0e;
+
+  /* no hosted fonts: the OS's monospace via the browser (see TODO.md) */
+  --mono: ui-monospace, 'SF Mono', Menlo, Consolas, 'Liberation Mono', 'DejaVu Sans Mono', monospace;
+
+  color-scheme: dark; /* native controls (audio, select) render dark */
+  accent-color: var(--link);
+  font-family: var(--mono);
+  font-size: 15px;
+  line-height: 1.6;
 }
 
+/* header on top, footer pinned to the bottom of the viewport, content in between */
 body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100dvh;
   margin: 0;
-  background: Canvas;
-  color: CanvasText;
+  background: var(--bg);
+  color: var(--text);
+}
+
+::selection {
+  background: var(--red-dark);
+  color: var(--text);
+}
+
+a {
+  color: var(--link);
+  text-decoration-color: var(--red-dark);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 3px;
+}
+
+a:hover {
+  color: var(--link-hover);
+  text-decoration-color: currentColor;
+}
+
+:focus-visible {
+  outline: 2px solid var(--link);
+  outline-offset: 2px;
+}
+
+h1,
+h2 {
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+h1 {
+  margin: 0 0 1.5rem;
+  font-size: 1.6rem;
 }
 
 main {
-  max-width: 40rem;
+  flex: 1;
+  max-width: 44rem;
   padding: 2rem 1rem;
 }
 
@@ -20,51 +76,103 @@ main.wide {
   max-width: none;
 }
 
-/* page fills the viewport so the footer sits at the bottom even with few tracks */
-body.with-footer {
-  display: flex;
-  flex-direction: column;
-  min-height: 100dvh;
-}
-
-body.with-footer main {
-  flex: 1;
-}
-
-/* stays pinned to the bottom of the window while the list scrolls */
-footer {
-  position: sticky;
-  bottom: 0;
+/* header + nav */
+.site-header {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 1rem 1.5rem;
+  justify-content: space-between;
+  gap: 1rem;
   padding: 1rem;
-  background: Canvas;
-  border-top: 1px solid GrayText;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
 }
 
-/* back button on the right, within thumb reach */
-footer form {
-  margin: 0 0 0 auto;
+.site-header ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 1.5rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
 }
 
-footer .logo {
-  width: min(100%, 11rem);
+.site-header nav a {
+  display: inline-block;
+  padding: 0.5rem 0; /* taller touch target */
+  text-decoration: none;
+}
+
+.site-header nav a[aria-current='page'] {
+  color: var(--text);
+  text-decoration: underline;
+  text-decoration-color: var(--red-dark);
+}
+
+.brand {
+  display: block;
+  flex: 0 0 auto;
+  width: 11rem; /* a fixed box: a %-sized image alone gives the flex item no width */
+  max-width: 100%;
 }
 
 .logo {
   display: block;
-  width: min(100%, 27rem);
+  width: 100%;
   height: auto;
 }
 
-.logo-small {
-  width: min(100%, 14rem);
+/* footer, pinned to the bottom of the window */
+.site-footer {
+  position: sticky;
+  bottom: 0;
+  padding: 0.75rem 1rem;
+  background: var(--surface);
+  border-top: 1px solid var(--border);
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+.site-footer p {
+  margin: 0;
+}
+
+.placeholder {
+  color: var(--muted);
+}
+
+/* home: terminal prompt */
+.prompt {
+  color: var(--link);
+}
+
+.cursor::after {
+  content: '_';
+  animation: blink 1.1s steps(1) infinite;
+}
+
+@keyframes blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cursor::after {
+    animation: none;
+  }
+}
+
+/* about */
+.portrait {
+  display: block;
+  width: min(100%, 320px);
+  height: auto;
+  margin-bottom: 1rem;
 }
 
 .featured {
-  margin-top: 3rem;
+  margin-top: 2.5rem;
 }
 
 .featured h2 {
@@ -76,31 +184,40 @@ footer .logo {
 .bevel {
   padding: 0.5rem 1rem;
   font: inherit;
-  color: CanvasText;
-  background: #3c3c3c;
+  color: var(--text);
+  background: var(--bevel-face);
   border: 2px solid;
-  border-color: #6a6a6a #141414 #141414 #6a6a6a;
+  border-color: var(--bevel-light) var(--bevel-dark) var(--bevel-dark) var(--bevel-light);
   border-radius: 0;
   cursor: pointer;
 }
 
 .bevel:active {
-  border-color: #141414 #6a6a6a #6a6a6a #141414;
+  border-color: var(--bevel-dark) var(--bevel-light) var(--bevel-light) var(--bevel-dark);
   padding: calc(0.5rem + 1px) calc(1rem - 1px) calc(0.5rem - 1px) calc(1rem + 1px);
 }
 
-/* one row of tracks, wrapping onto new rows as the window narrows */
+.bevel:disabled {
+  opacity: 0.5;
+  cursor: progress;
+}
+
+form {
+  margin: 0;
+}
+
+/* gallery: one row of tracks, wrapping onto new rows as the window narrows */
 #tracks {
   display: flex;
   flex-wrap: wrap;
-  gap: 1.5rem 2rem;
+  gap: 2rem;
   margin: 0;
   padding: 0;
   list-style: none;
 }
 
 #tracks li {
-  flex: 0 1 18rem;
+  flex: 0 1 20rem;
   min-width: 0;
 }
 
@@ -111,9 +228,57 @@ footer .logo {
 
 #tracks p {
   margin: 0 0 0.5rem;
+  color: var(--muted);
 }
 
 #tracks audio {
   display: block;
   width: 100%;
+}
+
+#tracks .track-links {
+  margin-top: 0.5rem;
+  font-size: 0.9rem;
+}
+
+/* studio (local only) */
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.toolbar select {
+  font: inherit;
+}
+
+#status {
+  color: var(--warn);
+}
+
+#editor {
+  min-height: 60vh;
+  background: var(--surface);
+  border: 1px solid var(--border);
+}
+
+#result {
+  margin-top: 1.5rem;
+}
+
+#result h2 {
+  margin: 0 0 0.5rem;
+  font-size: 1.05rem;
+}
+
+#result audio {
+  display: block;
+  width: min(100%, 32rem);
+}
+
+#log {
+  overflow-x: auto;
+  font-size: 0.85rem;
 }
