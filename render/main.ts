@@ -1,7 +1,10 @@
 import { initStrudel, renderPatternAudio } from '@strudel/web'
 
 const SAMPLE_RATE = 44100
-const MAX_POLYPHONY = 128
+// renderPatternAudio schedules every note before rendering starts, so none has ended yet and
+// superdough's voice limit (normally 128) would fade out the earliest notes over the whole render.
+// Effectively no limit here; live playback keeps the normal one.
+const MAX_POLYPHONY = 1_000_000
 
 let evalError: Error | undefined
 const ready = initStrudel({ onEvalError: (err) => (evalError = err) })
