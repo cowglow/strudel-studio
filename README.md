@@ -2,6 +2,7 @@
 
 Strudel compositions, rendered to audio locally and published as a static gallery on GitHub Pages.
 Pages: home, Gallery, About; the Studio exists only on the dev server.
+Live at https://cowglow.github.io/strudel-studio/ · source: https://github.com/cowglow/strudel-studio
 
 ## Workflow
 
@@ -32,7 +33,7 @@ Pages: home, Gallery, About; the Studio exists only on the dev server.
 
    From the terminal: `npm run render` renders compositions whose code changed since their last render,
    `npm run render -- <slug>` one, `npm run render -- --force` all.
-4. Commit and push; `.github/workflows/deploy.yml` publishes `dist/`.
+4. Commit and push to `main`; `.github/workflows/deploy.yml` builds and publishes `dist/` to GitHub Pages.
 
 Open items: [TODO.md](TODO.md). First-time setup: `npm install && npx playwright install chromium`.
 

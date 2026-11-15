@@ -165,10 +165,6 @@ main.wide {
   margin: 0;
 }
 
-.placeholder {
-  color: var(--muted);
-}
-
 /* home: terminal prompt */
 .prompt {
   color: var(--link);
