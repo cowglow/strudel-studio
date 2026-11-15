@@ -12,31 +12,35 @@
       <a href="/" class="brand"><img src="/images/cg-logo.png" alt="COWGLOW, home" class="logo" /></a>
       <nav aria-label="Main">
         <ul>
-          <li><a href="/gallery/">Gallery</a></li>
-          <li><a href="/about/">About</a></li>
+          <li><a href="/gallery/" class="bevel">Gallery</a></li>
+          <li><a href="/about/" class="bevel">About</a></li>
         </ul>
       </nav>
     </header>
     <main class="wide studio">
-      <h1>Studio</h1>
+      <h1 class="visually-hidden">Studio</h1>
       <div class="toolbar">
         <label>Composition <select id="pick"></select></label>
-        <label>Status
-          <select id="state">
-            <option value="backlog">Backlog</option>
-            <option value="complete">Complete</option>
-          </select>
-        </label>
-        <button type="button" id="new" class="bevel">New…</button>
-        <button type="button" id="rename" class="bevel">Rename…</button>
+        <div class="toolbar-end">
+          <button type="button" id="new" class="bevel">New…</button>
+          <button type="button" id="rename" class="bevel">Rename…</button>
+        </div>
       </div>
       <div class="toolbar">
         <button type="button" id="play" class="bevel" title="Ctrl+Enter">Play</button>
         <button type="button" id="stop" class="bevel" title="Ctrl+.">Stop</button>
         <button type="button" id="save" class="bevel" title="Ctrl+S / ⌘S">Save</button>
-        <button type="button" id="render" class="bevel">Render</button>
-        <output id="status" aria-live="polite"></output>
+        <div class="toolbar-end">
+          <label>Status
+            <select id="state">
+              <option value="backlog">Backlog</option>
+              <option value="complete">Complete</option>
+            </select>
+          </label>
+          <button type="button" id="render" class="bevel">Render</button>
+        </div>
       </div>
+      <p class="status-line"><output id="status" aria-live="polite"></output></p>
       <div id="editor"></div>
       <section id="result" hidden>
         <h2>Rendered</h2>

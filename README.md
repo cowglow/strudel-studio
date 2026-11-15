@@ -14,9 +14,13 @@ Pages: home, Gallery, About; the Studio exists only on the dev server.
 2. Every composition starts with a header:
    ```js
    // @title Jungle 01
+   // @by COWGLOW
+   // @origin COWGLOW's strudel studio & gallery
    // @bars 24
    // @status complete
    ```
+   `@title` and `@by` are strudel.cc's own metadata tags, so the credit travels with downloads and
+   "Open in Strudel" links; new compositions get them from `AUTHOR`/`ORIGIN` in `scripts/compositions.ts`.
    One bar = one cycle, so set the tempo with `setcpm(bpm / 4)`. No samples are preloaded, so load them with
    `await samples(...)`. Files must stay pasteable into https://strudel.cc, which remains a fallback editor.
    Anything but `@status complete` counts as backlog.

@@ -9,7 +9,7 @@ Open items to pick up in a later session.
       repo (no third-party font CDNs), which was deferred.
 - [ ] **GitHub repo.** Create it, add the remote, push, enable Pages (Settings → Pages → Source: GitHub
       Actions), then replace the "Source on GitHub [coming soon]" placeholder in every page footer.
-- [ ] **About page.** Real profile text instead of lorem ipsum, and a real photo instead of
-      `public/images/artist-placeholder.svg`.
+- [ ] **About page.** Real profile text instead of lorem ipsum (the photo is in:
+      `public/images/cowglow-portrait.jpg`).
 - [ ] **Home intro.** "strudel studio & gallery" is the only text on the home page; decide whether it
       needs more.

@@ -2,6 +2,7 @@
 export interface Track {
   slug: string
   title: string
+  by: string[]
   bars: number
   bpm: number
   seconds: number

@@ -1,6 +1,8 @@
 // @title Jungle 01
+// @by COWGLOW
+// @origin COWGLOW's strudel studio & gallery
 // @bars 24
-// @status complete
+// @status backlog
 // amen break, wavy three-note bass, half-time reese switch
 // paste into https://strudel.cc and press ctrl+enter
 

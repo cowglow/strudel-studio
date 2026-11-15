@@ -13,3 +13,6 @@ yarn-error.log*
 /dist
 /renders
 /.idea
+
+# macOS folder metadata
+.DS_Store

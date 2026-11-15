@@ -18,6 +18,9 @@ function renderTrack(track: Track): HTMLLIElement {
   const meta = document.createElement('p')
   meta.textContent = `${track.bpm} bpm · ${track.bars} bars · ${formatTime(track.seconds)}`
 
+  const credit = document.createElement('p')
+  credit.textContent = track.by.length ? `by ${track.by.join(', ')}` : ''
+
   const audio = document.createElement('audio')
   audio.controls = true
   audio.preload = 'none'
@@ -40,7 +43,7 @@ function renderTrack(track: Track): HTMLLIElement {
   links.className = 'track-links'
   links.append(download, ' · ', open)
 
-  li.append(title, meta, audio, links)
+  li.append(title, credit, meta, audio, links)
   return li
 }
 

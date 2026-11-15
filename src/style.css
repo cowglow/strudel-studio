@@ -21,6 +21,24 @@
   font-family: var(--mono);
   font-size: 15px;
   line-height: 1.6;
+  text-transform: uppercase;
+  letter-spacing: 0.04em; /* caps read better slightly spaced */
+}
+
+/* form controls don't inherit text-transform by default */
+button,
+select,
+input {
+  text-transform: inherit;
+  letter-spacing: inherit;
+}
+
+/* code stays as written: Strudel is case-sensitive */
+#editor,
+pre,
+code {
+  text-transform: none;
+  letter-spacing: normal;
 }
 
 /* header on top, footer pinned to the bottom of the viewport, content in between */
@@ -76,8 +94,21 @@ main.wide {
   max-width: none;
 }
 
-/* header + nav */
+/* visible to screen readers only */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* header + nav, pinned to the top of the window */
 .site-header {
+  position: sticky;
+  top: 0;
+  z-index: 10; /* above the studio editor */
   display: flex;
   flex-wrap: wrap;
   align-items: center;
@@ -91,22 +122,10 @@ main.wide {
 .site-header ul {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.25rem 1.5rem;
+  gap: 0.5rem;
   margin: 0;
   padding: 0;
   list-style: none;
-}
-
-.site-header nav a {
-  display: inline-block;
-  padding: 0.5rem 0; /* taller touch target */
-  text-decoration: none;
-}
-
-.site-header nav a[aria-current='page'] {
-  color: var(--text);
-  text-decoration: underline;
-  text-decoration-color: var(--red-dark);
 }
 
 .brand {
@@ -126,11 +145,20 @@ main.wide {
 .site-footer {
   position: sticky;
   bottom: 0;
+  z-index: 10;
   padding: 0.75rem 1rem;
   background: var(--surface);
   border-top: 1px solid var(--border);
   color: var(--muted);
   font-size: 0.85rem;
+}
+
+/* credit on the left, GitHub on the right; stacks on narrow screens */
+.site-footer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 0.25rem 1.5rem;
 }
 
 .site-footer p {
@@ -192,9 +220,21 @@ main.wide {
   cursor: pointer;
 }
 
-.bevel:active {
+a.bevel {
+  display: inline-block;
+  text-decoration: none;
+}
+
+/* pressed: while clicking, and for the nav button of the current page */
+.bevel:active,
+.bevel[aria-current='page'] {
   border-color: var(--bevel-dark) var(--bevel-light) var(--bevel-light) var(--bevel-dark);
   padding: calc(0.5rem + 1px) calc(1rem - 1px) calc(0.5rem - 1px) calc(1rem + 1px);
+}
+
+.bevel[aria-current='page'] {
+  background: var(--bg); /* sunk below the raised #333 faces */
+  cursor: default;
 }
 
 .bevel:disabled {
@@ -250,8 +290,35 @@ form {
   margin-bottom: 0.75rem;
 }
 
+/* groups pushed to the right edge of their row */
+.toolbar-end {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 0.75rem;
+  margin-left: auto;
+}
+
+.status-line {
+  min-height: 1.6em; /* reserve the line so messages don't shift the editor */
+  margin: 0 0 0.75rem;
+}
+
+.toolbar label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* same box as the buttons beside them, but sunken: a field, not a button */
 .toolbar select {
+  padding: calc(0.5rem + 2px) 0.5rem; /* selects size their content box differently */
   font: inherit;
+  color: var(--text);
+  background: var(--bg);
+  border: 2px solid;
+  border-color: var(--bevel-dark) var(--bevel-light) var(--bevel-light) var(--bevel-dark);
+  border-radius: 0;
 }
 
 #status {

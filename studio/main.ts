@@ -75,7 +75,8 @@ function setStatus(text: string) {
 
 function updateStatus() {
   statusPick.value = statusOf(mirror.code)
-  const parts = [slug ? `${slug}.js` : 'no composition']
+  // the dropdown already names the composition; only report its state
+  const parts: string[] = []
   if (isDirty()) parts.push('unsaved changes')
   if (playing) parts.push('playing')
   setStatus(parts.join(' · '))
@@ -127,6 +128,16 @@ async function open(next: string) {
 async function save() {
   if (!slug) return
   const code = mirror.code
+  // the file may have been edited outside the studio since it was opened; don't silently undo that
+  const onDisk = await (await api(`compositions/${slug}`)).text()
+  if (
+    onDisk !== savedCode &&
+    onDisk !== code &&
+    !confirm(`${slug}.js was changed outside the studio since you opened it. Overwrite those changes?`)
+  ) {
+    setStatus('Not saved: the file changed on disk. Reopen it to load the new version.')
+    return
+  }
   await api(`compositions/${slug}`, { method: 'PUT', body: code })
   savedCode = code
   await loadList() // the title may have changed
@@ -138,7 +149,7 @@ async function render() {
   if (isDirty()) await save()
   await mirror.stop()
   renderButton.disabled = true
-  setStatus(`Rendering ${slug}.js…`)
+  setStatus('Rendering…')
   try {
     const { ok, output } = await (await api(`render/${slug}`, { method: 'POST' })).json()
     log.textContent = output
@@ -148,8 +159,8 @@ async function render() {
       preview.src = `/api/audio/${slug}?t=${Date.now()}`
       setStatus(
         statusOf(mirror.code) === 'complete'
-          ? `Rendered ${slug}.js, in the gallery`
-          : `Rendered ${slug}.js, in the backlog (not in the gallery)`,
+          ? 'Rendered, in the gallery'
+          : 'Rendered, in the backlog (not in the gallery)',
       )
     } else {
       preview.removeAttribute('src')
@@ -187,12 +198,22 @@ async function renameCurrent() {
 
 // the header line in the file is the source of truth; the dropdown edits it and saves
 async function changeStatus() {
-  mirror.setCode(withStatus(mirror.code, statusPick.value as Status))
+  const next = statusPick.value as Status
+  // unpublishing takes a track off the site, so it is never a single stray click or keypress
+  if (
+    statusOf(mirror.code) === 'complete' &&
+    next === 'backlog' &&
+    !confirm(`Move ${slug}.js to the backlog? It will be removed from the gallery.`)
+  ) {
+    statusPick.value = 'complete'
+    return
+  }
+  mirror.setCode(withStatus(mirror.code, next))
   await save()
   setStatus(
     statusPick.value === 'complete'
-      ? `${slug}.js is complete${(await hasRender()) ? ' and in the gallery' : '; render it to add it to the gallery'}`
-      : `${slug}.js moved to the backlog`,
+      ? `Complete${(await hasRender()) ? ', in the gallery' : '; render to add it to the gallery'}`
+      : 'Moved to the backlog',
   )
 }
 

@@ -72,6 +72,7 @@ export async function syncTracks(root: string): Promise<Track[]> {
     tracks.push({
       slug: c.slug,
       title: c.title,
+      by: c.by,
       bars,
       bpm,
       seconds,
